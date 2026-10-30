@@ -6,14 +6,16 @@ class Book {// Classe: livro
     private string $author;
     private float $cost;
     private string $trecho;
+    private bool $is_rasgado;
 
     // Função __contruct
-    public function __construct(string $name, int $pages, string $author, float $cost, string $trecho){
+    public function __construct(string $name, int $pages, string $author, float $cost, string $trecho, bool $is_rasgado){
         $this->name = $name;
         $this->pages = $pages;
         $this->author = $author;
         $this->cost = $cost;
         $this->trecho = $trecho;
+        $this->is_rasgado = $is_rasgado;
     }
 
     // Funções relacionadas a READ
@@ -40,7 +42,8 @@ class Book {// Classe: livro
         echo "Autor(a): " . $this->author . "<br>";
         echo "Páginas: " . $this->pages . "<br>";
         echo "Custo: " . $this->cost . "<br>";
-        echo "Trecho do Livro: " . $this->trecho . "<hr>";
+        echo "Trecho do Livro: " . $this->trecho . "<br>";
+        echo 'O livro está rasgado? ' . ($this->is_rasgado ? 'Sim' : 'Não') . '<hr>';
     }
 
     // Funções relacionadas a CREATE
@@ -68,18 +71,24 @@ class Book {// Classe: livro
     }
 
     public function rasgarLivro() {
-        $total_len = strlen($this->trecho);
-        $metade = ceil($total_len / 2); 
-        $primeira = mb_substr($this->trecho, 0, $metade, 'UTF-8');
-        $segunda = mb_substr($this->trecho, $metade, null, 'UTF-8');
-        echo "Trecho rasgado no meio! <br>";
-        echo "Parte 1: " . $primeira . " (RASGADO) <br>";
-        echo "Parte 2: " . $segunda;
+        if ($this->is_rasgado == false) {
+            $total_len = strlen($this->trecho);
+            $metade = ceil($total_len / 2); 
+            $primeira = mb_substr($this->trecho, 0, $metade, 'UTF-8');
+            $segunda = mb_substr($this->trecho, $metade, null, 'UTF-8');
+            echo "Trecho rasgado no meio! <br>";
+            echo "Parte 1: " . $primeira . " (RASGADO) <br>";
+            echo "Parte 2: " . $segunda . "<br> <hr>";
+            $this->is_rasgado = true;
+        } elseif ($this->is_rasgado) {
+            echo "Livro já foi rasgado, não posso rasgar de novo...";
+        }
     }
 }
 
-$livroNovo = new Book("Harry Potter e o Enigma do Príncipe", 536, "J.K Rowling", 67.89,"Não tenha pena dos mortos, Harry. Tenha pena dos vivos.");
+$livroNovo = new Book("Harry Potter e o Enigma do Príncipe", 536, "J.K Rowling", 67.89,"Não tenha pena dos mortos, Harry. Tenha pena dos vivos.", false);
 $livroNovo-> showALL();
+$livroNovo-> rasgarLivro();
 $livroNovo-> rasgarLivro();
 
 
